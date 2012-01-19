@@ -25,7 +25,7 @@
 "
 "-----------------------------------------------------------------------------
 " Update history removed, it's not very interesting.
-" Contributors were: Doug Potts, Bram Moolenaar, Thomas Köhler
+" Contributors were: Doug Potts, Bram Moolenaar, Thomas K?hler
 "
 " This is a modified version to be compatible with winmanager.vim. 
 " Changes by Srinath Avadhanula
@@ -388,7 +388,7 @@ function! s:EditDir(...)
 		syn match browseSortBy      "^\" Sorted by .*$"  contains=browseSuffixInfo
 		syn match browseSuffixInfo  "(.*)$"  contained
 		syn match browseFilter      "^\" Not Showing:.*$"
-		syn match browseFiletime    "«\d\+$"
+		syn match browseFiletime    "\d\+$"
 		exec('syn match browseSuffixes    "' . b:suffixesHighlight . '"')
 
 		"hi def link browseSynopsis    PreProc
@@ -410,7 +410,7 @@ function! s:EditDir(...)
 		" when called in winmanager mode, the argument movefirst assumes the role
 		" of whether or not to split a window.
 		nnoremap <buffer> <cr> :call <SID>EditEntry(0,"winmanager")<cr>
-		nnoremap <buffer> <tab> :call <SID>EditEntry(1,"winmanager")<cr>
+		"nnoremap <buffer> <tab> :call <SID>EditEntry(1,"winmanager")<cr>
 		nnoremap <buffer> -    :call <SID>EditDir(b:parentDirEsc)<cr>
 		nnoremap <buffer> <2-leftmouse> :call <SID>EditEntry(0,"winmanager")<cr>
 		nnoremap <buffer> C    :call <SID>EditDir(getcwd(),1)<cr>:call <SID>RestoreFileDisplay()<cr>
@@ -703,8 +703,13 @@ endfunction
 " suffixes at the end (or the beginning)
 "
 function! s:SetSuffixesLast()
-	let b:suffixesRegexp = '\(' . substitute(escape(&suffixes,s:escregexp),',','\\|','g') . '\)$'
-	let b:suffixesHighlight = '^[^"].*\(' . substitute(escape(&suffixes,s:escregexp),',','\\|','g') . '\)\( \|$\)'
+	if g:suffixesnoescape==""
+		let b:tmpsuffixes=escape(&suffixes,s:escregexp)
+	else
+		let b:tmpsuffixes=escape(&suffixes,s:escregexp) . ',' . g:suffixesnoescape
+	endif
+	let b:suffixesRegexp = '\(' . substitute(b:tmpsuffixes,',','\\|','g') . '\)$'
+	let b:suffixesHighlight = '^[^"].*\(' . substitute(b:tmpsuffixes,',','\\|','g') . '\)\( \|$\)'
 	if has("fname_case")
 		let b:suffixesRegexp = '\C' . b:suffixesRegexp
 		let b:suffixesHighlight = '\C' . b:suffixesHighlight
@@ -897,7 +902,7 @@ function! s:ExtractFileDate(line)
 	if w:longlist==0
 		return getftime(s:ExtractFileName(a:line))
 	else
-		return strpart(matchstr(strpart(a:line,b:maxFileLen+b:maxFileSizeLen+4),"«.*"),1) + 0
+		return strpart(matchstr(strpart(a:line,b:maxFileLen+b:maxFileSizeLen+4),".*"),1) + 0
 	endif
 endfunction
 
@@ -919,17 +924,19 @@ function! s:AddHeader()
 			\."\" R : rename file          D : delete file\n"
 			\."\" f : add current directory to favourites\n"
 			\."\" :help file-explorer for detailed help\n"
+			\."\" Sorted by ".w:sortdirlabel.w:sorttype.b:suffixeslast.b:filtering."\n"
 	else
-		let @f="\" Press ? for keyboard shortcuts\n"
+"        let @f="\" Press ? for keyboard shortcuts\n"
+		let @f=""
 	endif
-	let @f=@f."\" Sorted by ".w:sortdirlabel.w:sorttype.b:suffixeslast.b:filtering."\n"
+"    let @f=@f."\" Sorted by ".w:sortdirlabel.w:sorttype.b:suffixeslast.b:filtering."\n"
 	let @f=@f."\"= ".b:completePath."\n"
 	put! f
 	let @f=save_f
 endfunction
 
 function! s:PrintFavDirs()
-	if !exists('s:favDirs')
+	if !exists('s:favDirs') || g:explDetailedHelp==0
 		return
 	end
 	setlocal modifiable
@@ -1011,7 +1018,7 @@ endfunction
 function! s:FileModDate(name)
 	let filetime=getftime(a:name)
 	if filetime > 0
-		return strftime(g:explDateFormat,filetime) . " «" . filetime
+		return strftime(g:explDateFormat,filetime) . " " . filetime
 	else
 		return ""
 	endif
