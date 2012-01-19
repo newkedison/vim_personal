@@ -40,6 +40,9 @@ set guifont="Serif 14"
 "let &termencoding=&encoding
 set fileencodings=utf-8,gbk,ucs-bom,cp936
 
+set visualbell
+set noerrorbells
+
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
 " let &guioptions = substitute(&guioptions, "t", "", "g")
 
