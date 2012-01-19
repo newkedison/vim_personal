@@ -116,6 +116,17 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 "WinManager相关设置
 let g:winManagerWindowLayout='FileExplorer|TagList'
 nmap wm :WMToggle<cr>
+"在读取c/c++文件时，启动WinManager
+autocmd BufRead,BufNew *.cpp,*.c,*.h,*.cc,*.hpp WManager
+"设置winfileexplorer在列出文件的时候，把哪些文件放到后面去，方便查找
+"这个设置是vim的内部设置，可以用:h suffixes查看其作用
+set suffixes=.bak,~,.o,.info,.swp,.obj,.d,.s,.out
+"因为列在上面的suffixes参数后的内容，到时候会被escape函数转义，所以没办法用regexp
+"所以我修改了winfileexplorer插件的代码，在里面增加了这个变量，写在这里的匹配是不会被转义的
+"需要注意的是，脚本会在最后自动加上一个$，所以不用自己加了
+"多个Regexp用逗号分隔，内部不能出现逗号
+"第一个是用于匹配带版本号的动态库文件
+let g:explSuffixesNoEscape='\.so\(\.\d\+\)*'
 
 "cscope相关设置
 set cscopequickfix=s-,c-,d-,i-,t-,e-

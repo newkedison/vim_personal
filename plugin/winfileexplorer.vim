@@ -113,6 +113,11 @@ if !exists("g:explSuffixesLast")
   let g:explSuffixesLast=1
 endif
 
+" Regexp to add Suffixes files
+if !exists("g:explSuffixesNoEscape")
+  let g:explSuffixesNoEscape=""
+endif
+
 " Include separator lines between directories, files, and suffixes?
 if !exists("g:explUseSeparators")
   let g:explUseSeparators=0
@@ -703,10 +708,10 @@ endfunction
 " suffixes at the end (or the beginning)
 "
 function! s:SetSuffixesLast()
-	if g:suffixesnoescape==""
+	if g:explSuffixesNoEscape==""
 		let b:tmpsuffixes=escape(&suffixes,s:escregexp)
 	else
-		let b:tmpsuffixes=escape(&suffixes,s:escregexp) . ',' . g:suffixesnoescape
+		let b:tmpsuffixes=escape(&suffixes,s:escregexp) . ',' . g:explSuffixesNoEscape
 	endif
 	let b:suffixesRegexp = '\(' . substitute(b:tmpsuffixes,',','\\|','g') . '\)$'
 	let b:suffixesHighlight = '^[^"].*\(' . substitute(b:tmpsuffixes,',','\\|','g') . '\)\( \|$\)'
