@@ -130,6 +130,35 @@ set suffixes=.bak,~,.o,.info,.swp,.obj,.d,.s,.out
 "多个Regexp用逗号分隔，内部不能出现逗号
 "第一个是用于匹配带版本号的动态库文件
 let g:explSuffixesNoEscape='\.so\(\.\d\+\)*'
+"如果只剩下WinManager窗口，则自动退出
+let g:persistentBehaviour=0
+"下面的函数是我自己写的，也是用于实现只剩下WinManager窗口时自动退出
+"虽然功能也能实现，但是存在着局限性，只能针对TagList和FileList两个窗口的情况
+"如果是其他情况，需要自己改代码,的确不如插件自己提供的函数好
+"不过写和调试也花了不少精力,就保留做纪念吧
+"function! Exit_When_No_Other_Buffer()
+"  let i = 1
+"  while 1
+"    let buf_count = winbufnr(i)
+"    if buf_count != -1
+"      let s = bufname(buf_count)
+"      if s != "__Tag_List__" && s != "[File List]"
+"        return
+"      endif
+"    else
+"      break
+"    endif
+"    let i=i+1
+"  endwhile
+"  if tabpagenr('$') == 1
+"    bdelete
+"    quit
+"  else
+"    close
+"  endif
+"endfunction
+"autocmd BufEnter __Tag_List__,\[File\ List\] nested 
+"      \ call Exit_When_No_Other_Buffer()
 
 "cscope相关设置
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -499,5 +528,7 @@ let OmniCpp_MayCompleteScope = 1
 "第二句是在离开插入模式的时候,我觉得这个时机还算不错
 "autocmd CursorMovedI * if pumvisible() == 0|pclose|endif 
 autocmd InsertLeave *.c,*.cpp,*.h if pumvisible() == 0|pclose|endif 
+
+
 
 " VIM: sw=2 ts=2 fileencoding=utf-8
