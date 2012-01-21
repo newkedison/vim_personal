@@ -120,7 +120,7 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 let g:winManagerWindowLayout='FileExplorer|TagList'
 nmap wm :WMToggle<cr>
 "在读取c/c++文件时，启动WinManager
-autocmd BufRead,BufNew *.cpp,*.c,*.h,*.cc,*.hpp WManager
+autocmd BufWinEnter *.cpp,*.c,*.h,*.cc,*.hpp WManager
 "设置winfileexplorer在列出文件的时候，把哪些文件放到后面去，方便查找
 "这个设置是vim的内部设置，可以用:h suffixes查看其作用
 set suffixes=.bak,~,.o,.info,.swp,.obj,.d,.s,.out
@@ -189,6 +189,10 @@ let mapleader=","
 map <leader>s :source ~/.vimrc<cr>
 map <leader>e :split ~/.vimrc<cr>
 au! bufwritepost .vimrc source ~/.vimrc
+
+nnoremap ; :
+
+nnoremap <leader>q :q
 
 set linespace=2
 au bufwritepost my_desert.vim colorscheme my_desert
