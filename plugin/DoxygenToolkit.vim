@@ -368,6 +368,10 @@ if exists("g:DoxygenToolkit_commentType")
 else
   let g:DoxygenToolkit_commentType = "C"
 endif
+if !exists("g:DoxygenToolkit_remainParameterType ")
+  let g:DoxygenToolkit_remainParameterType = "no"
+endif
+
 
 " Compact documentation
 " /**
@@ -1000,6 +1004,9 @@ endfunction
 " It is easy to do unless you use function's pointers...
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! s:ParseParameter( param )
+  if g:DoxygenToolkit_remainParameterType =~ "yes"
+    return a:param
+  endif
   let l:paramName = "Unknown"
   let l:firstIndex = stridx( a:param, '(' )
 

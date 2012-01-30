@@ -533,6 +533,15 @@ let OmniCpp_MayCompleteScope = 1
 "autocmd CursorMovedI * if pumvisible() == 0|pclose|endif 
 autocmd InsertLeave *.c,*.cpp,*.h if pumvisible() == 0|pclose|endif 
 
+"DoxygenToolkit 配置
+let g:DoxygenToolkit_briefTag_pre = "@brief "
+let g:DoxygenToolkit_paramTag_pre="@param "
+let g:DoxygenToolkit_returnTag="@returns "
+let g:DoxygenToolkit_authorName="newkedison<newkedison@gmail.com>"
+"如果设置为C++，则注释采用//，默认是使用/**/，我个人是倾向于//方式的注释
+"但是考虑到vim的折叠只能折叠/**/格式的注释，所以下面这个就不设置了
+"let g:DoxygenToolkit_commentType="C++"
+let g:DoxygenToolkit_remainParameterType = "yes"
 
 
 " VIM: sw=2 ts=2 fileencoding=utf-8
