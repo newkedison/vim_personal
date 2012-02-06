@@ -18,7 +18,7 @@ syn match nShellCmd   display "^\$\ \zs.\+"
 syn match nVimCmd     display "^:\zs.\+"
 syn match nReference  display "\(参考\|来源\)[：:].\+$"
 
-syn region nBlock     start=/[-=]\{10,}[^-=]\+[-=]\{10,}/ end=/[-=]\{20,}/ contains=nShellCmd
+syn region nBlock     start=/^\s*[-=]\{10,}.*[-=]\{10,}\s*$/ end=/[-=]\{20,}/ contains=nShellCmd
 
 hi def link nNote               Todo
 hi def link nIndex              Comment
