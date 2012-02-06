@@ -374,8 +374,8 @@ endfunction
 "不过自动折行有个小问题，就是按j和k进行光标移动的时候，一次会跳过整行，导致要把光标移动到一行的中间，要按很多次l才行
 "还好有gj和gk这两个也是移动的命令，可以满足要求，而且对于没有折行的，也是正常。所以这里直接把j和k映射上去
 set wrap
-"nnoremap j gj
-"nnoremap k gk
+nnoremap j gj
+nnoremap k gk
 
 "设置每行最大宽度为80，如果超过这个宽度，会自动换行，但是如果一行就是一个超过80个字
 "符的单词，不会被自动换行，只有从后面添加时，才会换行，如果从前面或者中间添加，
@@ -542,6 +542,9 @@ let g:DoxygenToolkit_authorName="newkedison<newkedison@gmail.com>"
 "但是考虑到vim的折叠只能折叠/**/格式的注释，所以下面这个就不设置了
 "let g:DoxygenToolkit_commentType="C++"
 let g:DoxygenToolkit_remainParameterType = "yes"
+
+"隐私设置，这个文件夹里面的所有文件，关闭persistent-undo和viminfo功能
+autocmd BufWritePre ~/.diary/** setlocal noundofile viminfo=
 
 
 " VIM: sw=2 ts=2 fileencoding=utf-8
