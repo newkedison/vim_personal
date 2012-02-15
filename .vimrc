@@ -272,9 +272,9 @@ endfunction
 "inoremap <BackSpace> <c-r>=NewBackSpace()<cr>
 inoremap <S-BackSpace> <Right><BackSpace>
 
-nnoremap <S-Tab> <C-w>w<C-w>_
-nnoremap <Tab> <C-w><C-w>
-nmap <F3> "ppjji
+"使得光标在不同窗口中跳转，Tab是向下/向右跳转，Shift+Tab则相反
+nnoremap <S-Tab> <C-w>W
+nnoremap <Tab> <C-w>w
 nmap <F6> :nohls<cr>
 "设置/取消高亮光标所在行和所在列
 map <F5> :set cursorline cursorcolumn
@@ -426,13 +426,11 @@ set statusline=%F%m%r,%Y,%{&fileformat}\ \ \ ASCII=\%b,HEX=\%B\ \ \ %l,%c%V\ %p%
 	"au QuickfixCmdPost make call QfMakeConv()
 
   "几个和make相关的映射
-  map <leader>m :w<bar>make<cr>
-  "这里先修改输入:make后执行的命令,然后执行make,最后恢复make默认的参数
-  "如果用这个映射,必须保证生成的可执行程序为a.out,然后在make没错误的情况下
-  "会自动调用这个a.out
-  map <leader>ma :w<bar>setlocal makeprg=make\ &&\ ./a.out<bar>make<bar>:setlocal makeprg=make<cr>
-  "打开QuickFix窗口
-  map <leader>w :cw<cr>
+  "make后面加上感叹号，使得不自动跳转到第一个错误，
+  "copen是打开QuickFix，不论是否有错误
+  map <leader>m :w<bar>make!<cr>j:copen<cr>
+  "在调用make后继续调用make run，要求Makefile里面要有run这一节
+  map <leader>ma :w<bar>make<cr>:make run<cr>
 
   "通过a.vim插件，实现在.h和.cpp之间切换，因为有其他<leader>a开头的映射
   "所以直接输入<leader>a要等1秒才能执行，所以这里多定义一个<leader>aa，
@@ -515,16 +513,16 @@ inoremap <expr> k          pumvisible()?"\<C-P>":"k"
 
 "OminCppComplete相关设置
 "不在全局范围内搜索,这样可以减少很多没用的匹配
-let OmniCpp_GlobalScopeSearch = 0
+let g:OmniCpp_GlobalScopeSearch = 0
 "补全列表中会列出函数原型,同时completeopt参数会加上preview选项,
 "有了preview选项的效果,就是会多出现一个窗口,列出更详细的函数原型
 "虽然这个窗口挺有用的,但是看完之后就失去作用了,还要手动关闭,比较麻烦
 "所以,下面会用一个autocmd把这个窗口关掉
 "需要注意的就是,如果要取消这个效果,除了把下面的参数改为0外,还要
 ":set completeopt-=preview
-let OmniCpp_ShowPrototypeInAbbr = 1
+let g:OmniCpp_ShowPrototypeInAbbr = 1
 "在按两次冒号后,会自动弹出补全列表
-let OmniCpp_MayCompleteScope = 1
+let g:OmniCpp_MayCompleteScope = 1
 
 "这里就是自动关闭上面提到的函数原型窗口,关闭的前提都是补全列表已经关闭
 "第一句是在插入模式下光标有移动就关闭,我觉得关闭的太快了,
@@ -536,15 +534,21 @@ autocmd InsertLeave *.c,*.cpp,*.h if pumvisible() == 0|pclose|endif
 "DoxygenToolkit 配置
 let g:DoxygenToolkit_briefTag_pre = "@brief "
 let g:DoxygenToolkit_paramTag_pre="@param "
-let g:DoxygenToolkit_returnTag="@returns "
+let g:DoxygenToolkit_returnTag="@retval "
 let g:DoxygenToolkit_authorName="newkedison<newkedison@gmail.com>"
+let g:DoxygenToolkit_startCommentTag = "/** "
+let g:DoxygenToolkit_startCommentBlock = "/* "
 "如果设置为C++，则注释采用//，默认是使用/**/，我个人是倾向于//方式的注释
 "但是考虑到vim的折叠只能折叠/**/格式的注释，所以下面这个就不设置了
 "let g:DoxygenToolkit_commentType="C++"
-let g:DoxygenToolkit_remainParameterType = "yes"
+let g:DoxygenToolkit_remainParameterType = "no"
 
 "隐私设置，这个文件夹里面的所有文件，关闭persistent-undo和viminfo功能
 autocmd BufWritePre ~/.diary/** setlocal noundofile viminfo=
 
+au BufNewFile,BufRead *.doxygen setfiletype doxygen
+
+au FileType gitcommit g/^#.*\n^#\@!/exec "norm o"
+au FileType gitcommit v/^#/s/^/#/
 
 " VIM: sw=2 ts=2 fileencoding=utf-8
