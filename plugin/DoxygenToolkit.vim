@@ -748,7 +748,11 @@ function! <SID>DoxygenCommentFunc()
   else
     let s:compactOneLineDoc = "no"
     let l:insertionMode = s:StartDocumentationBlock()
-    exec "normal ".l:insertionMode.s:interCommentTag.g:DoxygenToolkit_briefTag_pre
+    if l:insertionMode == "A"
+      exec "normal ".l:insertionMode.g:DoxygenToolkit_briefTag_pre
+    else
+      exec "normal ".l:insertionMode.s:interCommentTag.g:DoxygenToolkit_briefTag_pre
+    endif
   endif
   if( l:doc.name != "None" )
     exec "normal A".l:doc.name." "
@@ -860,7 +864,7 @@ function! s:StartDocumentationBlock()
     "exec "normal O".s:startCommentTag
     exec "normal O".strpart( s:startCommentTag, 0, 1 )
     exec "normal A".substitute( strpart( s:startCommentTag, 1 ), "[[:blank:]]*$", "", "" )
-    let l:insertionMode = "o"
+    let l:insertionMode = "A"
   else
     let l:insertionMode = "O"
   endif
