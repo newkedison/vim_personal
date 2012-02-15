@@ -370,6 +370,8 @@ detectindent-changelog	detectindent.txt	/*detectindent-changelog*
 detectindent-contents	detectindent.txt	/*detectindent-contents*
 detectindent-settings	detectindent.txt	/*detectindent-settings*
 detectindent.txt	detectindent.txt	/*detectindent.txt*
+doxygen-syntax	doxygen.txt	/*doxygen-syntax*
+doxygen.vim	doxygen.txt	/*doxygen.vim*
 drawit	DrawIt.txt	/*drawit*
 drawit-a	DrawIt.txt	/*drawit-a*
 drawit-b	DrawIt.txt	/*drawit-b*
