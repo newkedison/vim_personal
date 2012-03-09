@@ -34,7 +34,7 @@ set noerrorbells
 
 set encoding=utf-8
 set langmenu=zh_CN.UTF-8
-language messages zh_CN
+language messages zh_CN.UTF-8
 set imcmdline
 set guifont="Serif 14"
 "let &termencoding=&encoding
@@ -454,11 +454,12 @@ set statusline=%F%m%r,%Y,%{&fileformat}\ \ \ ASCII=\%b,HEX=\%B\ \ \ %l,%c%V\ %p%
 
   nmap <leader>du :silent! !echo a<cr>i<ESC>
   inoremap <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
-let g:pydiction_location='~/vim/pydiction/complete-dict'
+let g:pydiction_location='~/.vim/pydiction/complete-dict'
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType python compiler pylint
 let g:pylint_onwrite = 0 "不在保存py文件时自动检查,因为那很浪费时间
 let g:pylint_show_rate = 1
+autocmd FileType python set completeopt-=preview
 
 "如果版本号大于7.3，则启用持久化撤销的功能
 if version >=703
@@ -529,7 +530,7 @@ let g:OmniCpp_MayCompleteScope = 1
 "如果参数很长,可能还没能记住,所以被我注释掉了
 "第二句是在离开插入模式的时候,我觉得这个时机还算不错
 "autocmd CursorMovedI * if pumvisible() == 0|pclose|endif 
-autocmd InsertLeave *.c,*.cpp,*.h if pumvisible() == 0|pclose|endif 
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif 
 
 "DoxygenToolkit 配置
 let g:DoxygenToolkit_briefTag_pre = "@brief "
