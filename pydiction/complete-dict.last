@@ -93719,17 +93719,3 @@ formatter.get_bool_opt(
 formatter.get_style_by_name(
 
 --- from pygments.formatter import * ---
-
---- import Crypto ---
-Crypto.__all__
-Crypto.__builtins__
-Crypto.__doc__
-Crypto.__file__
-Crypto.__name__
-Crypto.__package__
-Crypto.__path__
-Crypto.__revision__
-Crypto.__version__
-Crypto.version_info
-
---- from Crypto import * ---

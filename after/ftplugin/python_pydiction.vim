@@ -83,7 +83,7 @@ if !exists("*s:TabComplete")
         " If the char is some other character, insert a normal Tab:
         if searchpos('[_a-zA-Z0-9.(]\%#', 'nb') != [0, 0] 
             if !pumvisible()
-                return "\<C-X>\<C-K>"
+                return "\<C-X>\<C-o>"
             else
                 if a:direction == 'down'
                     return "\<C-N>"
