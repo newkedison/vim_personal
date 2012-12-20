@@ -40,7 +40,7 @@ set guifont="Serif 14"
 "let &termencoding=&encoding
 set fileencodings=utf-8,gbk,ucs-bom,cp936
 
-set visualbell
+set visualbell t_vb=
 set noerrorbells
 
 " For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
@@ -216,29 +216,21 @@ inoremap [ []<left>
 inoremap { <c-r>=BigBracket()<CR>
 inoremap ' <c-r>=ReplaceQuote("'")<CR>
 inoremap " <c-r>=ReplaceQuote("\"")<CR>
+"对于vim脚本文件, 双引号还可以作为注释, 所以这里映射到一个专用函数
+"注意其中有个<buffer>, 表示这个映射只针对buffer有效
+autocmd FileType vim inoremap <buffer> " <c-r>=ReplaceQuoteForVim("\"")<CR>
 inoremap ) <c-r>=ClosePair(')')<CR>
 inoremap ] <c-r>=ClosePair(']')<CR>
 inoremap } <c-r>=ClosePair('}')<CR>
-"替换左花括号,如果当前行有内容,不替换,如果当前行只是空字符,则自动加上右括号,并且中间放一个空行
+"替换左花括号,如果当前行有内容,不替换,如果当前行只是空字符,则自动加上右括号,并且换行
 "这样做是因为有时候需要用单个大括号,表示折叠,所以不能替换
 function! BigBracket()
   if getline('.') =~ '^\s*$'
-    return "{}\<left>\<CR>\<ESC>O"
+    return "{}\<left>\<CR>\<ESC>kA"
   else
     return "{"
   endif
 endfunction
-"function! LeaTab()
-    "let col = col('.') - 1
-    "if col == strlen(getline('.'))    "原作者函数中没有这三行,当在行末按Tab时,会被映射成<Right>
-	    "return "\<tab>"
-    "endif
-    "if ")]}'\"" !~ getline('.')[col]
-        "return "\<tab>"
-    "endif
-    "return "\<RIGHT>"
-"endfunction
-"inoremap <tab> <c-r>=LeaTab()<cr>
 function! ClosePair(char)
   if getline('.')[col('.') - 1] == a:char
     return "\<Right>"
@@ -246,12 +238,20 @@ function! ClosePair(char)
     return a:char
   endif
 endfunction
-function! ReplaceQuote(c)
-  "这里处理整行没内容,然后输入引号的情况,这种情况不替换
-  "因为很可能是注释
-  if getline('.') =~ '^\s*$'
+"这个函数和下面的ReplaceQuote类似, 但是处理了双引号作为注释的情况
+"如果整行没内容,然后输入引号,这种情况就是注释, 那就不进行处理
+function! ReplaceQuoteForVim(c)
+  if getline('.') =~ '^\s*$' && a:c == '"'
     return a:c
   endif
+  if getline('.')[col('.') - 1] == a:c
+    return "\<Right>"
+  else
+    return a:c . a:c . "\<Left>"
+  endif
+endfunction
+
+function! ReplaceQuote(c)
   if getline('.')[col('.') - 1] == a:c
     return "\<Right>"
   else
@@ -549,7 +549,23 @@ autocmd BufWritePre ~/.diary/** setlocal noundofile viminfo=
 
 au BufNewFile,BufRead *.doxygen setfiletype doxygen
 
+au FileType gitcommit r /tmp/git_log.tmp
 au FileType gitcommit g/^#.*\n^#\@!/exec "norm o"
 au FileType gitcommit v/^#/s/^/#/
+
+"Ctrl-w is too hard to press
+noremap wl <C-w>l
+noremap wj <C-w>j
+noremap wk <C-w>k
+noremap wh <C-w>h
+
+"for vim-indent-guides
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+let g:indent_guides_enable_on_vim_startup=1 "auto start, use <leader>ig to toggle
+let g:indent_guides_auto_colors=0
+hi IndentGuidesEven ctermbg=233
+hi IndentGuidesOdd ctermbg=234
+
 
 " VIM: sw=2 ts=2 fileencoding=utf-8
