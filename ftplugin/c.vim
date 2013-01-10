@@ -466,7 +466,7 @@ inoremap  <buffer>  /*<CR>  /*<CR><CR>/<Esc>kA<Space>
 "-------------------------------------------------------------------------------
 " additional mapping : {<CR> always opens a block
 "-------------------------------------------------------------------------------
-inoremap  <buffer>  {<CR>    {<CR>}<Esc>O
+"inoremap  <buffer>  {<CR>    {<CR>}<Esc>O
 vnoremap  <buffer>  {<CR>   S{<CR>}<Esc>Pk=iB
 "
 "

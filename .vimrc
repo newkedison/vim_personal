@@ -33,8 +33,8 @@ set incsearch		" do incremental searching
 set noerrorbells
 
 set encoding=utf-8
-set langmenu=zh_CN.UTF-8
-language messages zh_CN.UTF-8
+"set langmenu=zh_CN.UTF-8
+"language messages zh_CN.UTF-8
 set imcmdline
 set guifont="Serif 14"
 "let &termencoding=&encoding
@@ -181,9 +181,9 @@ let g:miniBufExplorerMoreThanOne = 999
 let g:NeoComplCache_EnableAtStartup = 1 
 let g:SuperTabDefaultCompletionType="context"
 
-if version >=603
-	set helplang=cn
-endif
+"if version >=603
+"  set helplang=cn
+"endif
 let mapleader=","
 
 map <leader>s :source ~/.vimrc<cr>
@@ -432,11 +432,8 @@ set statusline=%F%m%r,%Y,%{&fileformat}\ \ \ ASCII=\%b,HEX=\%B\ \ \ %l,%c%V\ %p%
   "在调用make后继续调用make run，要求Makefile里面要有run这一节
   map <leader>ma :w<bar>make<cr>:make run<cr>
 
-  "通过a.vim插件，实现在.h和.cpp之间切换，因为有其他<leader>a开头的映射
-  "所以直接输入<leader>a要等1秒才能执行，所以这里多定义一个<leader>aa，
-  "这样按起来比较流畅
+  "通过a.vim插件，实现在.h和.cpp之间切换  
   map <leader>a :w<bar>A<cr>
-  map <leader>aa :w<bar>A<cr>
 
   "c.vim的配置
   "设置日期和时间的格式,如果不设置,将显示为中文,这样不太合适
@@ -567,5 +564,23 @@ let g:indent_guides_auto_colors=0
 hi IndentGuidesEven ctermbg=233
 hi IndentGuidesOdd ctermbg=234
 
+"disable the AlignMaps plugin(~/.vim/plugin/AlignPlugin.vim)
+"because I never use it and it define some unuse <leader>a* map
+let g:loaded_AlignMapsPlugin = "v41"
+
+"set the content of status line
+"show more important information when it is short
+set statusline=
+set statusline +=%n\        "buffer number
+set statusline +=%{&ff}     "file format
+set statusline +=%Y         "file type
+set statusline +=%<\ %F     "full path
+set statusline +=%#StatusLineFlag#%m         "modified flag
+set statusline +=%r%*         "modified flag
+set statusline +=%=%P,%v,%#StatusLineLineNo#%l%* "percent,virtual columen,line
+set statusline +=/%L        "total lines
+set statusline +=\ %B       "character under cursor
+hi StatusLineFlag ctermbg=126 cterm=reverse,bold
+hi StatusLineLineNo ctermbg=4 cterm=reverse,bold
 
 " VIM: sw=2 ts=2 fileencoding=utf-8
