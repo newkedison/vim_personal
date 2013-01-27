@@ -18,6 +18,7 @@ endif
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -69,6 +70,10 @@ endif
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
+
+  filetype off
+  call pathogen#infect()
+  call pathogen#helptags()
 
   " Enable file type detection.
   " Use the default filetype settings, so that mail gets 'tw' set to 72,
@@ -582,5 +587,8 @@ set statusline +=/%L        "total lines
 set statusline +=\ %B       "character under cursor
 hi StatusLineFlag ctermbg=126 cterm=reverse,bold
 hi StatusLineLineNo ctermbg=4 cterm=reverse,bold
+
+" python-mode options(see :h PythonModeOptions for more info)
+let pymode_lint_ignore="E111"
 
 " VIM: sw=2 ts=2 fileencoding=utf-8
