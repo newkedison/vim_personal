@@ -308,7 +308,8 @@ map <F9> :w<bar>call RunSource():cw
 
 "map <F9> :w<bar>:make<cr>:cw<cr><cr><cr>
 
-colorscheme my_desert
+"colorscheme my_desert
+colorscheme bandit
 au BufRead,BufNewFile,ColorScheme *.tips setfiletype tips
 au BufRead,BufNewFile,ColorScheme *.lnt setfiletype c
 nnoremap <F2> :call setline('.', strftime('%Y-%m-%d %H:%M:%S', localtime()))
